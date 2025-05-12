@@ -33,12 +33,12 @@ script/barcode_hash_v2_ME.py
 script/fq_barcode_correction_R1_ME.py
 ```
 
-#### 5. compress fastq file
+#### 6. compress fastq file
 ```
 
 pigz -p {threads} {input}
 ```
-#### 6. remove the ME sequence in the fastq file
+#### 7. remove the ME sequence in the fastq file
 ```
 
 cutadapt -Z -j {threads} -e 0.2  -g file:ME_index\
