@@ -1,0 +1,89 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 99
+Job counts:
+	count	jobs
+	1	ME
+	1	find_right_barcodes
+	1	r1_zip
+	1	r2_zip
+	1	read_barcode_correction
+	1	targetfiles
+	6
+
+[Tue Apr 15 10:18:08 2025]
+rule find_right_barcodes:
+    input: 02_barcode_info/XW373_raw_barcode_count.txt
+    output: 02_barcode_info/XW373.barcode_final_summary, 02_barcode_info/XW373.barcode_final_map, 02_barcode_info/XW373.barcode_log
+    jobid: 18
+    wildcards: sample=XW373
+
+Submitted job 18 with external jobid 'Submitted batch job 27973709'.
+[Tue Apr 15 10:19:49 2025]
+Finished job 18.
+1 of 6 steps (17%) done
+
+[Tue Apr 15 10:19:49 2025]
+rule read_barcode_correction:
+    input: 01_raw_fq_update/XW373_index_L001_R1_001.fastq, 01_raw_fq_update/XW373_index_L001_R2_001.fastq, 02_barcode_info/XW373.barcode_final_map
+    output: 03_corrected_fq/XW373_L001_R1_001.fastq, 03_corrected_fq/XW373_L001_R2_001.fastq
+    log: 00_log/XW373_L001_R1_corrected.log
+    jobid: 12
+    wildcards: sample=XW373
+
+Submitted job 12 with external jobid 'Submitted batch job 27973795'.
+[Tue Apr 15 10:38:57 2025]
+Finished job 12.
+2 of 6 steps (33%) done
+
+[Tue Apr 15 10:38:57 2025]
+rule r2_zip:
+    input: 03_corrected_fq/XW373_L001_R2_001.fastq
+    output: 03_corrected_fq/XW373_L001_R2_001.fastq.gz
+    jobid: 9
+    wildcards: sample=XW373
+    threads: 11
+
+pigz -p 11 03_corrected_fq/XW373_L001_R2_001.fastq
+Submitted job 9 with external jobid 'Submitted batch job 27974414'.
+
+[Tue Apr 15 10:38:58 2025]
+rule r1_zip:
+    input: 03_corrected_fq/XW373_L001_R1_001.fastq
+    output: 03_corrected_fq/XW373_L001_R1_001.fastq.gz
+    jobid: 8
+    wildcards: sample=XW373
+    threads: 11
+
+pigz -p 11 03_corrected_fq/XW373_L001_R1_001.fastq
+Submitted job 8 with external jobid 'Submitted batch job 27974415'.
+[Tue Apr 15 10:44:39 2025]
+Finished job 8.
+3 of 6 steps (50%) done
+[Tue Apr 15 10:46:19 2025]
+Finished job 9.
+4 of 6 steps (67%) done
+
+[Tue Apr 15 10:46:19 2025]
+rule ME:
+    input: 03_corrected_fq/XW373_L001_R1_001.fastq.gz, 03_corrected_fq/XW373_L001_R2_001.fastq.gz
+    output: 05_ME_fq/XW373_cutM13R_cutME_L001_R1_001.fastq.gz, 05_ME_fq/XW373_cutM13R_cutME_L001_R2_001.fastq.gz
+    jobid: 3
+    wildcards: sample=XW373
+    threads: 11
+
+cutadapt -Z -j 11 -e 0.2  -g file:ME_index        -o 05_ME_fq/XW373_cutM13R_cut{name}_L001_R1_001.fastq.gz         -p 05_ME_fq/XW373_cutM13R_cut{name}_L001_R2_001.fastq.gz         03_corrected_fq/XW373_L001_R1_001.fastq.gz  03_corrected_fq/XW373_L001_R2_001.fastq.gz
+Submitted job 3 with external jobid 'Submitted batch job 27974642'.
+[Tue Apr 15 10:56:58 2025]
+Finished job 3.
+5 of 6 steps (83%) done
+
+[Tue Apr 15 10:56:58 2025]
+localrule targetfiles:
+    input: 05_ME_fq/XW371_cutM13R_cutME_L001_R2_001.fastq.gz, 05_ME_fq/XW372_cutM13R_cutME_L001_R2_001.fastq.gz, 05_ME_fq/XW373_cutM13R_cutME_L001_R2_001.fastq.gz
+    jobid: 0
+
+[Tue Apr 15 10:56:58 2025]
+Finished job 0.
+6 of 6 steps (100%) done
+Complete log: /work/xw171/sciHiCARM-DNA-extractBarcode/.snakemake/log/2025-04-15T101808.802615.snakemake.log

@@ -1,0 +1,26 @@
+{
+    "XW371": {
+        "R1": [
+            "fq_YD208/XW371_R1_001.fastq.gz"
+        ],
+        "R2": [
+            "fq_YD208/XW371_R2_001.fastq.gz"
+        ]
+    },
+    "XW372": {
+        "R1": [
+            "fq_YD208/XW372_R1_001.fastq.gz"
+        ],
+        "R2": [
+            "fq_YD208/XW372_R2_001.fastq.gz"
+        ]
+    },
+    "XW373": {
+        "R1": [
+            "fq_YD208/XW373_R1_001.fastq.gz"
+        ],
+        "R2": [
+            "fq_YD208/XW373_R2_001.fastq.gz"
+        ]
+    }
+}
